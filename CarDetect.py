@@ -16,8 +16,8 @@ while True:
     height, width, _ = frame.shape
 
 
-    # Extract and roi (Area of interest)
-    aoi = frame[340: 720, 500: 800] 
+    # Extract an aoi (Area of interest)
+    aoi = frame[350: 750, 500: 800] 
 
     # Object Detection
     mask = object_detector.apply(aoi)
@@ -31,7 +31,7 @@ while True:
 
         #Calc area and remove small (not needed) elements
         area = cv2.contourArea(cnt)
-        if area > 100:
+        if area > 90:
             #cv2.drawContours(roi, [cnt], -1, (0,255,0), 2)
             x, y, w, h = cv2.boundingRect(cnt)
             
@@ -41,9 +41,11 @@ while True:
     boxes_ids = tracker.update(detections)
     for box_id in boxes_ids:
         x, y, w, h, id = box_id
-
-        cv2.putText(aoi, str(id), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
-        cv2.rectangle(aoi, (x, y), (x + w, y + h), (0, 255, 0), 3)
+        
+        # Creates a rectangle aroud the detected vehicles
+        # Adds a number above the detected vehicles to keep count
+        cv2.putText(aoi, str(id), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2)
+        cv2.rectangle(aoi, (x, y), (x + w, y + h), (0, 0, 255), 3)
 
 
     cv2.imshow("Area of Interst", aoi)
